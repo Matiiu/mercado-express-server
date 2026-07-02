@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum MovementType {
+  ENTRADA
+  SALIDA
+}
+
+enum AlertType {
+  STOCK_BAJO
+}
+
+enum AlertStatus {
+  ACTIVA
+  RESUELTA
+}
+
+enum OrderStatus {
+  PENDIENTE
+  APROBADA
+  RECHAZADA
+  RECIBIDA
+}
+
+// ─────────────────────────────────────────────
+// MODELOS
+// ─────────────────────────────────────────────
+
+model Product {
+  id           String   @id @default(uuid())
+  name         String   @db.VarChar(100) // 3-100 chars (mínimo validado en DTO)
+  sku          String   @unique @db.VarChar(20) // 6-20 alfanumérico, único
+  category     String
+  price        Decimal  @db.Decimal(12, 2) // > 0 (validado en DTO)
+  currentStock Int      @default(0) // >= 0 — REGLA 1 reforzada con CHECK en migración
+  minStock     Int // > 0, umbral de alerta
+  supplier     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  movements StockMovement[]
+  alerts    Alert[]
+  orders    PurchaseOrder[]
+
+  // Índices para filtros de RF-06
+  @@index([category])
+  @@index([supplier])
+  @@index([currentStock])
+  @@map("products")
+}
+
+// RF-02: Historial de movimientos
+// REGLA 6: inmutable — sin updatedAt a propósito; el repositorio
+// solo expone create/find (nunca update/delete)
+model StockMovement {
+  id        String       @id @default(uuid())
+  productId String
+  type      MovementType
+  quantity  Int // > 0 (validado en DTO)
+  reason    String
+  createdAt DateTime     @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([productId, createdAt])
+  @@map("stock_movements")
+}
+
+// RF-03: Alertas de stock bajo
+model Alert {
+  id         String      @id @default(uuid())
+  productId  String
+  type       AlertType   @default(STOCK_BAJO)
+  status     AlertStatus @default(ACTIVA)
+  createdAt  DateTime    @default(now())
+  resolvedAt DateTime? // null mientras esté ACTIVA
+
+  product Product         @relation(fields: [productId], references: [id])
+  orders  PurchaseOrder[]
+
+  @@index([productId, status])
+  @@map("alerts")
+}
+
+// RF-04 / RF-05: Órdenes de compra
+model PurchaseOrder {
+  id              String      @id @default(uuid())
+  productId       String
+  alertId         String? // nullable: orden manual o desde alerta
+  supplier        String // snapshot del proveedor al crear la orden
+  quantity        Int // REGLA 2: >= 2x minStock (validado en servicio)
+  status          OrderStatus @default(PENDIENTE)
+  rejectionReason String? // REGLA 5: obligatorio (>= 10 chars) solo al rechazar
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  product Product @relation(fields: [productId], references: [id])
+  alert   Alert?  @relation(fields: [alertId], references: [id])
+
+  @@index([productId])
+  @@index([status])
+  @@map("purchase_orders")
+}
