@@ -40,11 +40,11 @@ responsabilidad:
 Controller  →  Service  →  Repository  →  Prisma (PostgreSQL)
 ```
 
-| Capa           | Responsabilidad                                                                 |
-| -------------- | -------------------------------------------------------------------------------- |
-| **Controller** | Expone los endpoints HTTP. Recibe el DTO ya validado y delega en el `service`. No contiene lógica de negocio. |
-| **Service**    | Contiene las reglas de negocio (validaciones cruzadas, cálculos, orquestación de transacciones, mapeo a entidades de respuesta). |
-| **Repository** | Única capa que conoce a Prisma. Traduce operaciones de negocio a queries (`findMany`, `create`, `update`, etc.). |
+| Capa           | Responsabilidad                                                                                                                                                                                                   |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Controller** | Expone los endpoints HTTP. Recibe el DTO ya validado y delega en el `service`. No contiene lógica de negocio.                                                                                                     |
+| **Service**    | Contiene las reglas de negocio (validaciones cruzadas, cálculos, orquestación de transacciones, mapeo a entidades de respuesta).                                                                                  |
+| **Repository** | Única capa que conoce a Prisma. Traduce operaciones de negocio a queries (`findMany`, `create`, `update`, etc.).                                                                                                  |
 | **Prisma**     | ORM + capa de acceso a datos sobre PostgreSQL. Reglas críticas (stock no negativo, una sola alerta activa por producto) están reforzadas también a nivel de base de datos con `CHECK` e índices únicos parciales. |
 
 Código transversal reutilizable por todos los módulos vive en `src/common/`:
@@ -96,17 +96,17 @@ Código transversal reutilizable por todos los módulos vive en `src/common/`:
 
 ## Tecnologías
 
-| Categoría         | Tecnología                                       |
-| ------------------ | ------------------------------------------------- |
-| Runtime            | Node.js 22 LTS                                    |
-| Framework          | NestJS 11                                         |
-| Lenguaje           | TypeScript 5                                      |
-| Base de datos      | PostgreSQL 16                                     |
-| ORM                | Prisma ORM 7 (`@prisma/client`, `@prisma/adapter-pg`) |
-| Validación         | class-validator / class-transformer               |
-| Testing            | Jest 30 + ts-jest, mocks de Prisma (sin base de datos real) |
-| Lint / formato     | ESLint 9 + Prettier 3                              |
-| Contenedores       | Docker, docker-compose                             |
+| Categoría      | Tecnología                                                  |
+| -------------- | ----------------------------------------------------------- |
+| Runtime        | Node.js 22 LTS                                              |
+| Framework      | NestJS 11                                                   |
+| Lenguaje       | TypeScript 5                                                |
+| Base de datos  | PostgreSQL 16                                               |
+| ORM            | Prisma ORM 7 (`@prisma/client`, `@prisma/adapter-pg`)       |
+| Validación     | class-validator / class-transformer                         |
+| Testing        | Jest 30 + ts-jest, mocks de Prisma (sin base de datos real) |
+| Lint / formato | ESLint 9 + Prettier 3                                       |
+| Contenedores   | Docker, docker-compose                                      |
 
 ## Cómo correr el proyecto
 
@@ -172,7 +172,8 @@ npm run build
 npm run start:prod
 ```
 
-La API queda disponible en `http://localhost:3000`.
+La API queda disponible en [http://localhost:3000](http://localhost:3000 'http://localhost:3000').
+La Documentación esta disponible en [http://localhost:3000/api/docs](http://localhost:3000/api/docs 'http://localhost:3000/api/docs')
 
 ### Correr con Docker
 
@@ -185,16 +186,16 @@ docker run --env-file .env.production -p 3000:3000 mercado-express-server
 
 ## Endpoints
 
-| Método | Ruta                                        | Descripción                                  |
-| ------ | ------------------------------------------- | --------------------------------------------- |
-| POST   | `/products`                                 | Registra un producto (RF-01)                  |
-| GET    | `/products`                                 | Lista productos paginados con filtros (RF-06) |
-| POST   | `/products/:productId/stock-movements`      | Registra un movimiento de stock (RF-02)       |
-| GET    | `/alerts`                                   | Lista alertas paginadas, filtrables por estado (RF-03) |
-| POST   | `/purchase-orders`                          | Crea una orden de compra (RF-04)              |
-| PATCH  | `/purchase-orders/:id/approve`              | Aprueba una orden pendiente (RF-05)           |
-| PATCH  | `/purchase-orders/:id/reject`               | Rechaza una orden pendiente (RF-05)           |
-| PATCH  | `/purchase-orders/:id/receive`              | Recibe una orden e incrementa el stock (RF-05)|
+| Método | Ruta                                   | Descripción                                            |
+| ------ | -------------------------------------- | ------------------------------------------------------ |
+| POST   | `/products`                            | Registra un producto (RF-01)                           |
+| GET    | `/products`                            | Lista productos paginados con filtros (RF-06)          |
+| POST   | `/products/:productId/stock-movements` | Registra un movimiento de stock (RF-02)                |
+| GET    | `/alerts`                              | Lista alertas paginadas, filtrables por estado (RF-03) |
+| POST   | `/purchase-orders`                     | Crea una orden de compra (RF-04)                       |
+| PATCH  | `/purchase-orders/:id/approve`         | Aprueba una orden pendiente (RF-05)                    |
+| PATCH  | `/purchase-orders/:id/reject`          | Rechaza una orden pendiente (RF-05)                    |
+| PATCH  | `/purchase-orders/:id/receive`         | Recibe una orden e incrementa el stock (RF-05)         |
 
 ## Testing
 
