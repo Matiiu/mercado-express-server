@@ -1,7 +1,6 @@
 import { MovementType } from '@prisma-client';
 import { ApiProperty } from '@nestjs/swagger';
 
-/** RF-02: forma de respuesta pública de un movimiento de inventario. */
 export class StockMovement {
   @ApiProperty({ description: 'ID unico del movimiento.', example: 'clx9j4u1q0000abc123def456' })
   id: string;

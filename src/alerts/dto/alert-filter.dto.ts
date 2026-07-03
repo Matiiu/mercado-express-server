@@ -6,7 +6,6 @@ import { AlertStatus } from '@prisma-client';
 
 const { ALERT } = VALIDATION_MESSAGES;
 
-/** RF-03: filtro de consulta de alertas por estado (ACTIVA o RESUELTA). */
 export class AlertFilterDto {
   @ApiPropertyOptional({
     description: 'Estado de la alerta.',

@@ -7,10 +7,6 @@ import { VALIDATION_MESSAGES } from '@/common/constants/messages.constants';
 
 const { PRODUCT } = VALIDATION_MESSAGES;
 
-/**
- * Filtros de consulta de inventario (RF-06): por categoría, proveedor,
- * estado de alerta activa y rango de stock.
- */
 export class ProductFilterDto {
   @ApiPropertyOptional({
     description: 'Filtra por categoria exacta.',

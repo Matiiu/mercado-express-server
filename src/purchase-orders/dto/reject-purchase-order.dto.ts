@@ -6,7 +6,6 @@ import { VALIDATION_MESSAGES } from '@/common/constants/messages.constants';
 
 const { PURCHASE_ORDER } = VALIDATION_MESSAGES;
 
-/** RF-05 / REGLA 5: rechazar una orden requiere un motivo de al menos 10 caracteres. */
 export class RejectPurchaseOrderDto {
   @ApiProperty({
     description: 'Motivo del rechazo de la orden.',

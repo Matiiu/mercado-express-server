@@ -5,7 +5,6 @@ import { AlertsService } from '@/alerts/alerts.service';
 import { FindAlertsDto } from '@/alerts/dto/find-alerts.dto';
 import { Alert } from '@/alerts/entities/alert.entity';
 
-/** RF-03: consulta de alertas por estado (ACTIVA o RESUELTA), paginada. */
 @Controller('alerts')
 @ApiTags('Alertas')
 export class AlertsController {

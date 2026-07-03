@@ -1,7 +1,6 @@
 import { OrderStatus } from '@prisma-client';
 import { ApiProperty } from '@nestjs/swagger';
 
-/** Forma de respuesta pública de una orden de compra (RF-04 / RF-05). */
 export class PurchaseOrder {
   @ApiProperty({
     description: 'ID unico de la orden de compra.',

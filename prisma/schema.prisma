@@ -45,12 +45,12 @@ enum OrderStatus {
 
 model Product {
   id           String   @id @default(uuid())
-  name         String   @db.VarChar(100) // 3-100 chars (mínimo validado en DTO)
-  sku          String   @unique @db.VarChar(20) // 6-20 alfanumérico, único
+  name         String   @db.VarChar(100)
+  sku          String   @unique @db.VarChar(20)
   category     String
-  price        Decimal  @db.Decimal(12, 2) // > 0 (validado en DTO)
-  currentStock Int      @default(0) // >= 0 — REGLA 1 reforzada con CHECK en migración
-  minStock     Int // > 0, umbral de alerta
+  price        Decimal  @db.Decimal(12, 2)
+  currentStock Int      @default(0)
+  minStock     Int
   supplier     String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -59,16 +59,12 @@ model Product {
   alerts    Alert[]
   orders    PurchaseOrder[]
 
-  // Índices para filtros de RF-06
   @@index([category])
   @@index([supplier])
   @@index([currentStock])
   @@map("products")
 }
 
-// RF-02: Historial de movimientos
-// REGLA 6: inmutable — sin updatedAt a propósito; el repositorio
-// solo expone create/find (nunca update/delete)
 model StockMovement {
   id        String       @id @default(uuid())
   productId String
@@ -83,7 +79,6 @@ model StockMovement {
   @@map("stock_movements")
 }
 
-// RF-03: Alertas de stock bajo
 model Alert {
   id         String      @id @default(uuid())
   productId  String
@@ -98,16 +93,14 @@ model Alert {
   @@index([productId, status])
   @@map("alerts")
 }
-
-// RF-04 / RF-05: Órdenes de compra
 model PurchaseOrder {
   id              String      @id @default(uuid())
   productId       String
-  alertId         String? // nullable: orden manual o desde alerta
-  supplier        String // snapshot del proveedor al crear la orden
-  quantity        Int // REGLA 2: >= 2x minStock (validado en servicio)
+  alertId         String?
+  supplier        String
+  quantity        Int
   status          OrderStatus @default(PENDIENTE)
-  rejectionReason String? // REGLA 5: obligatorio (>= 10 chars) solo al rechazar
+  rejectionReason String?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 

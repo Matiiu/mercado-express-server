@@ -6,10 +6,6 @@ import { VALIDATION_MESSAGES } from '@/common/constants/messages.constants';
 
 const { PURCHASE_ORDER } = VALIDATION_MESSAGES;
 
-/**
- * RF-04: crea una orden de compra manualmente o a partir de una alerta
- * STOCK_BAJO activa (`alertId` opcional).
- */
 export class CreatePurchaseOrderDto {
   @ApiProperty({
     description: 'ID del producto para ordenar.',

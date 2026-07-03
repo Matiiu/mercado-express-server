@@ -1,7 +1,6 @@
 import { AlertStatus, AlertType } from '@prisma-client';
 import { ApiProperty } from '@nestjs/swagger';
 
-/** Forma de respuesta pública de una alerta (RF-03). */
 export class Alert {
   @ApiProperty({ description: 'ID unico de la alerta.', example: 'clx9j4u1q0000abc123def456' })
   id: string;

@@ -12,12 +12,6 @@ import { FindAlertsDto } from '@/alerts/dto/find-alerts.dto';
 import { AlertsWithPagination } from '@/alerts/interfaces/alerts-with-pagination.interface';
 import { ProductStockSnapshot } from '@/alerts/interfaces/product-stock-snapshot.interface';
 
-/**
- * RF-03: sincroniza el estado de alerta de un producto tras cualquier
- * ajuste de stock (RF-02). Crea una alerta ACTIVA cuando el stock cae a o
- * por debajo del mínimo (si no hay una ya activa — REGLA 4) y resuelve la
- * alerta activa cuando el stock se recupera por encima del mínimo.
- */
 @Injectable()
 export class AlertsService {
   constructor(private readonly alertsRepository: AlertsRepository) {}
@@ -37,7 +31,6 @@ export class AlertsService {
     }
   }
 
-  /** RF-03: consulta paginada de alertas, opcionalmente filtrada por estado. */
   async findMany(filter: FindAlertsDto): Promise<AlertsWithPagination> {
     const { page = DEFAULT_PAGINATION_PAGE, limit = DEFAULT_PAGINATION_LIMIT, status } = filter;
 
