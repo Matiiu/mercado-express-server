@@ -143,13 +143,14 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mercado_express?sche
 ### 3. Levantar PostgreSQL
 
 ```bash
-docker compose up -d
+docker compose --env-file .env.development up -d postgres
 ```
 
 ### 4. Aplicar migraciones y generar el cliente de Prisma
 
 ```bash
 npx prisma migrate deploy
+npx prisma generate
 ```
 
 ### 5. (Opcional) Cargar los datos de referencia
