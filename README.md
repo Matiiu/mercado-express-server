@@ -6,7 +6,7 @@ generación/aprobación de órdenes de compra a proveedores.
 
 Construida con **NestJS**, **Prisma ORM** y **PostgreSQL**.
 
-🔗 **API desplegada:** [https://mercado-express-server.onrender.com](https://mercado-express-server.onrender.com)
+🔗 **API desplegada:** [https://mercado-express-server.onrender.com/products](https://mercado-express-server.onrender.com/products)
 
 📘 **Documentación (Swagger):** [https://mercado-express-server.onrender.com/api/docs](https://mercado-express-server.onrender.com/api/docs)
 
