@@ -6,6 +6,12 @@ generación/aprobación de órdenes de compra a proveedores.
 
 Construida con **NestJS**, **Prisma ORM** y **PostgreSQL**.
 
+🔗 **API desplegada:** [https://mercado-express-server.onrender.com](https://mercado-express-server.onrender.com)
+📘 **Documentación (Swagger):** [https://mercado-express-server.onrender.com/api/docs](https://mercado-express-server.onrender.com/api/docs)
+
+> ⚠️ El servicio está en el plan gratuito de Render, por lo que puede tardar
+> unos segundos en responder si estuvo inactivo (cold start).
+
 ## Tabla de contenidos
 
 - [Arquitectura](#arquitectura)
@@ -115,13 +121,19 @@ Código transversal reutilizable por todos los módulos vive en `src/common/`:
 - Node.js 22 o superior
 - Docker y Docker Compose (para PostgreSQL) — o una instancia propia de PostgreSQL 16
 
-### 1. Instalar dependencias
+### 1. Clonar el proyecto
+
+```bash
+git clone <url-proyecto>
+```
+
+### 2. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-### 2. Configurar variables de entorno
+### 3. Configurar variables de entorno
 
 Copia el archivo de ejemplo y completa los valores:
 
@@ -140,20 +152,20 @@ DB_PORT=5432
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mercado_express?schema=public"
 ```
 
-### 3. Levantar PostgreSQL
+### 4. Levantar PostgreSQL
 
 ```bash
 docker compose --env-file .env.development up -d postgres
 ```
 
-### 4. Aplicar migraciones y generar el cliente de Prisma
+### 5. Aplicar migraciones y generar el cliente de Prisma
 
 ```bash
 npx prisma migrate deploy
 npx prisma generate
 ```
 
-### 5. (Opcional) Cargar los datos de referencia
+### 6. (Opcional) Cargar los datos de referencia
 
 Inserta los 6 productos de referencia del enunciado (Agua Mineral, Jugo de
 Naranja, Leche Entera, Yogur Natural, Papas Fritas, Detergente):
@@ -162,7 +174,7 @@ Naranja, Leche Entera, Yogur Natural, Papas Fritas, Detergente):
 npm run db:seed
 ```
 
-### 6. Levantar la aplicación
+### 7. Levantar la aplicación
 
 ```bash
 # desarrollo (watch mode)
