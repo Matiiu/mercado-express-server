@@ -4,7 +4,7 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
+describe('AppModule (e2e)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
@@ -16,8 +16,22 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/').expect(200).expect('Hello World!');
+  it('should bootstrap the application', () => {
+    expect(app).toBeDefined();
+  });
+
+  it('/alerts (GET) should match snapshot', async () => {
+    const response = await request(app.getHttpServer()).get('/alerts');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchSnapshot();
+  });
+
+  it('/prodcuts (GET) should match snapshot', async () => {
+    const response = await request(app.getHttpServer()).get('/products');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchSnapshot();
   });
 
   afterEach(async () => {
